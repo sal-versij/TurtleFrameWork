@@ -112,7 +112,7 @@ var errors = {
 
 class core {
 	constructor(model) {
-		this._v = "CR00b05";
+		this._v = "CR00b06";
 		this.modules = {};
 		this.interfaces = {};
 		this.model = model;
@@ -179,7 +179,7 @@ class core {
 	}
 	postinit() {
 		for (var i in this.modules) {
-			this.modules[i].__exec__();
+			this.modules[i].__exec__(this);
 		}
 	}
 	addScript(script) {
@@ -213,6 +213,7 @@ var model = {
 			}
 			this.__preinit__(_);
 		} catch (e) {
+			console.log(e);
 			console.error(e.msg);
 		}
 		finally {
