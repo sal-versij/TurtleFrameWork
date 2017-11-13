@@ -110,69 +110,78 @@ var errors = {
 
 class core {
 	constructor(model) {
-		this._v = "CR00b03";
+		this._v = "CR00b04";
 		this.modules = {};
 		this.interfaces = {};
 		this.model = model;
-		this.workStatus = [{
-				f: "constructor",
-				v: this._v,
-				m: this.model
-			}
-		];
 	}
-	addModule(n, m) {
-		if (this.modules[n] == undefined) {
-			this.modules[n] = jQuery.extend(true, {}, this.model, m);
+	addModule(m) {
+		if (this.modules[m.__name__] == undefined) {
+			this.modules[m.__name__] = jQuery.extend(true, {}, this.model, m);
 			return true;
 		} else {
 			return false;
 		}
 	}
-	addInterface(n, i) {
-		if (this.interfaces[n] == undefined) {
-			this.interfaces[n] = i;
+	addInterface(i) {
+		if (this.interfaces[i.__name__] == undefined) {
+			this.interfaces[i.__name__] = i;
 			return true;
 		} else {
 			return false;
 		}
 	}
-	findDependencies(ds) {
+	exist(name) {
+		if (this.modules[name] == undefined)
+			throw new errors.moduleNotFound(name, this.modules);
+	}
+	exists(ds) {
 		for (var i = 0; i < ds.length; i++) {
-			if (this.modules[ds[i]] == undefined)
-				throw new errors.moduleNotFound(ds[i], this.modules);
+			this.exist(ds[i]);
 		}
 	}
 	isCompiled(name) {
 		if (!this.modules[name] == undefined) {
-			if (!this.modules[name].__compiled__) {}
-			else {
-				throw new errors.moduleNotCompiled(name, this.modules[name]);
+			if (!this.modules[name].__compiled__) {
+				return true;
+			} else {
+				return false;
 			}
 		} else {
 			throw new errors.moduleNotFound(name, this.modules);
 		}
 	}
+	forceCompile(n) {
+		this.modules[n].__compile__(this);
+	}
 	preinit() {
-		for (var i = 0; i < this.modules.length; i++) {
+		for (var i in this.modules) {
 			try {
-				this.modules.__compile__(this);
+				this.modules[i].__compile__(this);
 			} catch (e) {
 				console.error(e.msg);
 			}
 		}
+		this.scriptHolder = $('[data-scriptHolder="TurtleFrameWork"]');
 	}
 	init() {
 		this.preinit();
-		for (var i = 0; i < this.interfaces.length; i++) {
-			this.interfaces.__init__();
+		for (var i in this.interfaces) {
+			this.interfaces[i].__init__(this);
 		}
-		for (var i = 0; i < this.modules.length; i++) {
-			this.modules.__init__();
+		for (var i in this.modules) {
+			this.modules[i].__init__(this);
 		}
 		this.postinit();
 	}
-	postinit() {}
+	postinit() {
+		for (var i in this.modules) {
+			this.modules[i].__exec__();
+		}
+	}
+	addScript(script){
+		this.scriptHolder.append("<script>" + script + "</script>");
+	}
 };
 
 // setup environment
@@ -187,16 +196,18 @@ var model = {
 	__interfaces__: [],
 	__built_in__: [],
 	__attr__: [],
-	__init__: function () {},
 	__str__: function () {
-		return "[{0}>>{3}::{1}#{2}@{4}]".f(this.__dependencies__.join(">"), this.__name__, this.__version__, this.__extends__.join(":"), this.__interfaces__.join("@"), this.hashID());
+		return "[{0}>>{3}::{1}#{2}@{4}//{5}]".f(this.__dependencies__.join(">"), this.__name__, this.__version__, this.__extends__.join(":"), this.__interfaces__.join("@"), hashObj(this));
 	},
 	__compile__: function (_) {
 		try {
-			_.findDependencies(this.__dependencies__);
-			for (i in this.__extends__) {
-				if (!_.find)
-					$.extend(true, this, )
+			_.exists(this.__dependencies__);
+			for (var i = 0; i < this.__extends__.length; i++) {
+				if (_.isCompiled(this.__extends__[i])) {
+					$.extend(true, this, this.__extends__[i])
+				} else {
+					_.forceCompile(this.__name__);
+				}
 			}
 		} catch (e) {
 			console.error(e.msg);
@@ -205,12 +216,12 @@ var model = {
 			this.__compiled__ = true;
 		}
 	},
+	__init__: function () {},
+	__exec__: function () {},
 	__compiled__: false
 };
 
 var tfw = new core(model);
-$('[data-scriptHolder="TurtleFrameWork"]').ready(function () {});
 $(document).ready(function () {
-	
 	tfw.init();
 });
