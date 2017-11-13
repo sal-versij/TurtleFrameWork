@@ -73,8 +73,9 @@ class error {
 
 var errors = {
 	moduleNotFound: class extends error {
-		constructor(name, _) {
-			super("MDLONF", "Module '{module}' not found\n\tsnapshot: {snapshot}", {
+		constructor(loc, name, _) {
+			super("MDLONF", "Module '{module}' not found\n\tLocation: {loc}\n\tsnapshot: {snapshot}", {
+				loc: loc,
 				module: name,
 				snapshot: codify(_)
 			})
@@ -82,7 +83,8 @@ var errors = {
 	},
 	moduleNotCompiled: class extends error {
 		constructor(name, _) {
-			super("MDLONC", "Module '{module}' not compiled\n\tsnapshot: {snapshot}", {
+			super("MDLONC", "Module '{module}' not compiled\n\tLocation: {loc}\n\tsnapshot: {snapshot}", {
+				loc: loc,
 				module: name,
 				snapshot: codify(_)
 			})
@@ -90,7 +92,8 @@ var errors = {
 	},
 	interfaceNotFound: class extends error {
 		constructor(name, _) {
-			super("NTRFNF", "Interface '{interface}' not found\n\tsnapshot: {snapshot}", {
+			super("NTRFNF", "Interface '{interface}' not found\n\tLocation: {loc}\n\tsnapshot: {snapshot}", {
+				loc: loc,
 				module: name,
 				snapshot: codify(_)
 			})
@@ -98,7 +101,8 @@ var errors = {
 	},
 	interfaceNotInitialized: class extends error {
 		constructor(name, _) {
-			super("NTRFNI", "Interface '{interface}' not initialized\n\tsnapshot: {snapshot}", {
+			super("NTRFNI", "Interface '{interface}' not initialized\n\tLocation: {loc}\n\tsnapshot: {snapshot}", {
+				loc: loc,
 				module: name,
 				snapshot: codify(_)
 			})
@@ -108,7 +112,7 @@ var errors = {
 
 class core {
 	constructor(model) {
-		this._v = "CR00b04";
+		this._v = "CR00b05";
 		this.modules = {};
 		this.interfaces = {};
 		this.model = model;
@@ -131,7 +135,7 @@ class core {
 	}
 	exist(name) {
 		if (this.modules[name] == undefined)
-			throw new errors.moduleNotFound(name, this.modules);
+			throw new errors.moduleNotFound("[core]>(exist)>_if", name, this.modules);
 	}
 	exists(ds) {
 		for (var i = 0; i < ds.length; i++) {
@@ -139,18 +143,19 @@ class core {
 		}
 	}
 	isCompiled(name) {
-		if (!this.modules[name] == undefined) {
+		if (this.modules[name] != undefined) {
 			if (!this.modules[name].__compiled__) {
 				return true;
 			} else {
 				return false;
 			}
 		} else {
-			throw new errors.moduleNotFound(name, this.modules);
+			throw new errors.moduleNotFound("[core]>(isCompiled)>_else",name, this.modules);
 		}
 	}
 	forceCompile(n) {
-		this.modules[n].__compile__(this);
+		if(!this.modules[n].__compiling__)
+			this.modules[n].__compile__(this);
 	}
 	preinit() {
 		for (var i in this.modules) {
@@ -196,15 +201,17 @@ var model = {
 		return "[{0}>>{3}::{1}#{2}@{4}//{5}]".f(this.__dependencies__.join(">"), this.__name__, this.__version__, this.__extends__.join(":"), this.__interfaces__.join("@"), hashObj(this));
 	},
 	__compile__: function (_) {
+		this.__compiling__ = true;
 		try {
 			_.exists(this.__dependencies__);
 			for (var i = 0; i < this.__extends__.length; i++) {
 				if (_.isCompiled(this.__extends__[i])) {
 					$.extend(true, this, this.__extends__[i])
 				} else {
-					_.forceCompile(this.__name__);
+					_.forceCompile(this.__extends__[i]);
 				}
 			}
+			this.__preinit__(_);
 		} catch (e) {
 			console.error(e.msg);
 		}
@@ -212,8 +219,10 @@ var model = {
 			this.__compiled__ = true;
 		}
 	},
+	__preinit__: function (_) {},
 	__init__: function () {},
 	__exec__: function () {},
+	__compiling__: false,
 	__compiled__: false
 };
 
