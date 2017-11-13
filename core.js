@@ -1,4 +1,3 @@
-// initialize requirements
 String.prototype.f = function () {
 	var s = this,
 	i = arguments.length;
@@ -15,7 +14,7 @@ String.prototype.hash = function () {
 	for (i = 0; i < str.length; i++) {
 		char = str.charCodeAt(i);
 		hash = ((hash << 5) - hash) + char;
-		hash = hash & hash; // Convert to 32bit integer
+		hash = hash & hash;
 	}
 	return hash;
 }
@@ -55,7 +54,6 @@ hashObj = function (_) {
 	return codify(_).hash();
 }
 
-// classes
 class environment {
 	constructor(version) {
 		this._v = "NV00b01";
@@ -179,15 +177,13 @@ class core {
 			this.modules[i].__exec__();
 		}
 	}
-	addScript(script){
+	addScript(script) {
 		this.scriptHolder.append("<script>" + script + "</script>");
 	}
 };
 
-// setup environment
 window.environment = new environment();
 
-// initialize variables
 var model = {
 	__name__: undefined,
 	__version__: undefined,
