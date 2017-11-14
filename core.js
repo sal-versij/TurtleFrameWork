@@ -112,7 +112,7 @@ var errors = {
 
 class core {
 	constructor(model) {
-		this._v = "CR00b07";
+		this._v = "CR00b08";
 		this.modules = {};
 		this.interfaces = {};
 		this.model = model;
@@ -144,7 +144,7 @@ class core {
 	}
 	isCompiled(name) {
 		if (this.modules[name] != undefined) {
-			if (!this.modules[name].__compiled__) {
+			if (this.modules[name].__compiled__) {
 				return true;
 			} else {
 				return false;
@@ -159,11 +159,7 @@ class core {
 	}
 	preinit() {
 		for (var i in this.modules) {
-			try {
-				this.modules[i].__compile__(this);
-			} catch (e) {
-				console.error(e.msg);
-			}
+			this.modules[i].__compile__(this);
 		}
 		this.scriptHolder = $('[data-scriptHolder="TurtleFrameWork"]');
 	}
@@ -204,20 +200,25 @@ var model = {
 		this.__compiling__ = true;
 		try {
 			_.exists(this.__dependencies__);
+			obj = {};
 			for (var i = 0; i < this.__extends__.length; i++) {
 				if (_.isCompiled(this.__extends__[i])) {
-					$.extend(true, this, this.__extends__[i])
+					$.extend(true, obj, _.modules[this.__extends__[i]]);
 				} else {
 					_.forceCompile(this.__extends__[i]);
 				}
 			}
+			$.extend(true, obj, this);
+			$.extend(true, this, obj);
 			this.__preinit__(_);
 		} catch (e) {
-			if (e.stack == undefined) {
-				console.error(e.msg);
-			} else {
-				console.error(e)
+			if (e.stack != undefined) {
+				e = new error("NKNWXCPT", "Error: {err}\nObj: {obj}", {
+						err: e.stack,
+						obj: codify(this)
+					});
 			}
+			throw e;
 		}
 		finally {
 			this.__compiled__ = true;
@@ -230,7 +231,18 @@ var model = {
 	__compiled__: false
 };
 
+function handleError(e) {
+	if (e.stack == undefined)
+		console.error(e.msg);
+	else
+		console.error(e);
+}
+
 var tfw = new core(model);
 $(document).ready(function () {
-	tfw.init();
+	try {
+		tfw.init();
+	} catch (e) {
+		handleError(e);
+	}
 });
