@@ -112,7 +112,7 @@ var errors = {
 
 class core {
 	constructor(model) {
-		this._v = "CR00b06";
+		this._v = "CR00b07";
 		this.modules = {};
 		this.interfaces = {};
 		this.model = model;
@@ -150,11 +150,11 @@ class core {
 				return false;
 			}
 		} else {
-			throw new errors.moduleNotFound("[core]>(isCompiled)>_else",name, this.modules);
+			throw new errors.moduleNotFound("[core]>(isCompiled)>_else", name, this.modules);
 		}
 	}
 	forceCompile(n) {
-		if(!this.modules[n].__compiling__)
+		if (!this.modules[n].__compiling__)
 			this.modules[n].__compile__(this);
 	}
 	preinit() {
@@ -213,16 +213,19 @@ var model = {
 			}
 			this.__preinit__(_);
 		} catch (e) {
-			console.log(e);
-			console.error(e.msg);
+			if (e.stack == undefined) {
+				console.error(e.msg);
+			} else {
+				console.error(e)
+			}
 		}
 		finally {
 			this.__compiled__ = true;
 		}
 	},
 	__preinit__: function (_) {},
-	__init__: function () {},
-	__exec__: function () {},
+	__init__: function (_) {},
+	__exec__: function (_) {},
 	__compiling__: false,
 	__compiled__: false
 };
