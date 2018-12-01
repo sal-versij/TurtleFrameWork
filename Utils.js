@@ -1,4 +1,4 @@
-loadJS = (url) => {
+function loadJS(url) {
 	$.getScript(url, function () {
 		console.debug(url + " loaded");
 	});
