@@ -1,15 +1,16 @@
+// Global methods
 function loadJS(url) {
 	$.getScript(url, function () {
-		console.debug(url + " loaded");
+		console.debug(url + ' loaded');
 	});
 }
 
 function log(..._) {
-	console.log([..._])
+	console.log([..._]);
 	return _[0];
 }
 
-function  * range(a, b = undefined, c = undefined, l = undefined) {
+function* range(a, b = undefined, c = undefined, l = undefined) {
 	!b && ([b, a] = [a, 0]);
 	if (l) {
 		while (a < 0)
@@ -32,10 +33,11 @@ function  * range(a, b = undefined, c = undefined, l = undefined) {
 			yield i;
 }
 
+// String's methods
 String.prototype.hash = function () {
 	var str = this;
 	var hash = 0;
-	if (str.length == 0)
+	if (str.length <= 0)
 		return hash;
 	for (i = 0; i < str.length; i++) {
 		char = str.charCodeAt(i);
@@ -43,31 +45,32 @@ String.prototype.hash = function () {
 		hash = hash & hash;
 	}
 	return hash;
-}
+};
 
 String.prototype.f = function (..._) {
 	var s = this;
-	for (var i in args) {
-		s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), args[i]);
+	for (var i in _) {
+		s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), _[i]);
 	}
 	return s;
-}
+};
 
-String.prototype.format = function (args) {
+String.prototype.format = function (_) {
 	var s = this;
-	for (var i in args) {
-		s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), args[i]);
+	for (var i in _) {
+		s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), _[i]);
 	}
 	return s;
-}
+};
 
-Array.prototype.iterate = function  * (a, b, c) {
+// Array's methods
+Array.prototype.iterate = function* (a, b, c) {
 	var l = this.length;
 	for (i of range(a, b, c, l)) {
 		yield this[i];
 	}
-}
+};
 
 Array.prototype.get = function (a, b, c) {
-	return [...this.iterate(a, b, c)]
-}
+	return [...this.iterate(a, b, c)];
+};
