@@ -1,11 +1,25 @@
-String.prototype.f = function () {
-	var s = this,
-	i = arguments.length;
-	while (i--) {
-		s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), arguments[i]);
+function log(_, ...o) {
+	console.log([_, ...o])
+	return _
+}
+
+function  * range(a, b = undefined, c = 1, l = undefined) {
+	if (b == undefined)
+		[b, a] = [a, 0];
+	if (a > b ^ c > 0)
+		c = -c;
+	while (a < 0)
+		a += l;
+	while (a >= l)
+		a -= l;
+	while (b < 0)
+		b += l;
+	while (b >= l)
+		b -= l;
+	for (var i = a; i <= b; i += c) {
+		yield i;
 	}
-	return s;
-};
+}
 
 String.prototype.hash = function () {
 	var str = this;
@@ -20,6 +34,14 @@ String.prototype.hash = function () {
 	return hash;
 }
 
+String.prototype.f = function (..._) {
+	var s = this,
+	for (var i in args) {
+		s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), args[i]);
+	}
+	return s;
+}
+
 String.prototype.format = function (args) {
 	var s = this;
 	for (var i in args) {
@@ -28,28 +50,9 @@ String.prototype.format = function (args) {
 	return s;
 }
 
-function log(_, ...o) {
-	console.log([_, ...o])
-	return _
-}
-
-function  * range(a, b = undefined, c = 1) {
-	if (b == undefined) {
-		b = a;
-		a = 0;
-	}
-	for (var i = a; i < b; i += c) {
-		yield i;
-	}
-}
-
 Array.prototype.iterate = function  * (a, b, c) {
 	var l = this.length;
-	for (i of range(a, b, c)) {
-		while (i < 0)
-			i += l;
-		while (i >= l)
-			i -= l;
+	for (i of range(a, b, c, l)) {
 		yield this[i];
 	}
 }
