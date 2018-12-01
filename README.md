@@ -1,2 +1,3 @@
 # TurtleFrameWork
-my personal client-sided javascript framework
+
+A bundle of javascript utils for my needs
