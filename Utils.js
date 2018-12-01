@@ -1,3 +1,9 @@
+loadJS = (url) => {
+	$.getScript(url, function () {
+		console.debug(url + " loaded");
+	});
+}
+
 function log(_, ...o) {
 	console.log([_, ...o])
 	return _
