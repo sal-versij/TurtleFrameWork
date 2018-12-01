@@ -4,9 +4,9 @@ function loadJS(url) {
 	});
 }
 
-function log() {
-	console.log([...arguments])
-	return arguments[0];
+function log(..._) {
+	console.log([..._])
+	return _[0];
 }
 
 function  * range(a, b = undefined, c = undefined, l = undefined) {
