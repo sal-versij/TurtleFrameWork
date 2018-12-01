@@ -3,22 +3,27 @@ function log(_, ...o) {
 	return _
 }
 
-function  * range(a, b = undefined, c = 1, l = undefined) {
-	if (b == undefined)
-		[b, a] = [a, 0];
-	if (a > b ^ c > 0)
-		c = -c;
-	while (a < 0)
-		a += l;
-	while (a >= l)
-		a -= l;
-	while (b < 0)
-		b += l;
-	while (b >= l)
-		b -= l;
-	for (var i = a; i <= b; i += c) {
-		yield i;
+function  * range(a, b = undefined, c = undefined, l = undefined) {
+	!b && ([b, a] = [a, 0]);
+	if (l) {
+		while (a < 0)
+			a += l;
+		while (a >= l)
+			a -= l;
+		while (b < 0)
+			b += l;
+		while (b >= l)
+			b -= l;
 	}
+	c = !c && (a > b ? -1 : 1) || c;
+	if ((a > b) ^ (c < 0))
+		return;
+	if (a < b)
+		for (var i = a; i <= b; i += c)
+			yield i;
+	else
+		for (var i = a; i >= b; i += c)
+			yield i;
 }
 
 String.prototype.hash = function () {
@@ -35,7 +40,7 @@ String.prototype.hash = function () {
 }
 
 String.prototype.f = function (..._) {
-	var s = this,
+	var s = this;
 	for (var i in args) {
 		s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), args[i]);
 	}
