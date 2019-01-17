@@ -39,20 +39,21 @@ function HTMLEscape(v) {
 }
 
 function HTMLUnescape(v) {
-	var toEscape = /&(#\d+|\w+)+?;/g;
-	var text = log(v.split(toEscape));
+	var toEscape = /&(?:#\d+|\w+)+?;/g;
+	var vs = v.split(toEscape);
 	var escaped = [];
 	var out = [];
 
-	var escapeHTML = (_) => $('<div>').html(v).text();
+	var escapeHTML = (_) => $('<div>').html(_).text();
+	var c;
 	while (c = toEscape.exec(v))
-		escaped.push(c[0]);
+		escaped.push(escapeHTML(c[0]));
 
-	for (i in text)
-		out.push(text[i] + (i in escaped && escaped[i]));
-	return out;
+	for (i of range(vs.length - 1))
+		out.push(vs[i] + (i in escaped && escaped[i] || "");
+	
+	return out.join('');
 }
-
 
 // String's methods
 String.prototype.hash = function () {
