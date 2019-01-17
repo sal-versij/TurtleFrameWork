@@ -9,6 +9,10 @@ ___
   Richiama `console.log` passandogli un array contenente tutti gli argomenti passati e restituisce il primo di essi
 - ***range(a, b, c, l)*** \
   Restituisce un generatore che itererà i valori compresi in [a,b] estremi **inclusi**
+- ***HTMLEscape(v)*** \
+  Fa l'escape della stringa passata in entità **HTML**
+- ***HTMLUnescape(v)*** \
+  Fa l'unescape delle entità **HTML** nella stringa passata
 
 ### Funzioni per `String`
 - `String.`***hash()*** \
