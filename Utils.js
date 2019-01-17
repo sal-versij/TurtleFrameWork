@@ -33,6 +33,27 @@ function* range(a, b = undefined, c = undefined, l = undefined) {
 			yield i;
 }
 
+// HTML escaping
+function HTMLEscape(v) {
+	return $('<div>').text(v).html();
+}
+
+function HTMLUnescape(v) {
+	var toEscape = /&(#\d+|\w+)+?;/g;
+	var text = log(v.split(toEscape));
+	var escaped = [];
+	var out = [];
+
+	var escapeHTML = (_) => $('<div>').html(v).text();
+	while (c = toEscape.exec(v))
+		escaped.push(c[0]);
+
+	for (i in text)
+		out.push(text[i] + (i in escaped && escaped[i]));
+	return out;
+}
+
+
 // String's methods
 String.prototype.hash = function () {
 	var str = this;
