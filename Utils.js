@@ -50,7 +50,7 @@ function HTMLUnescape(v) {
 		escaped.push(escapeHTML(c[0]));
 
 	for (i of range(vs.length - 1))
-		out.push(vs[i] + (i in escaped && escaped[i] || "");
+		out.push(vs[i] + (i in escaped && escaped[i] || ""));
 	
 	return out.join('');
 }
