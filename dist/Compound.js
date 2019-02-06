@@ -1,21 +1,9 @@
-// Global methods
 function loadJS(url) {
 	$.getScript(url, function () {
 		console.debug(url + ' loaded');
 	});
 }
-
-function debug(..._) {
-	console.trace();
-	return log(..._);
-}
-
-function log(..._) {
-	console.log([..._]);
-	return _[0];
-}
-
-function* range(a, b = undefined, c = undefined, l = undefined) {
+function  * range(a, b = undefined, c = undefined, l = undefined) {
 	!b && ([b, a] = [a, 0]);
 	if (l) {
 		while (a < 0)
@@ -37,30 +25,30 @@ function* range(a, b = undefined, c = undefined, l = undefined) {
 		for (var i = a; i <= b; i += c)
 			yield i;
 }
-
-// HTML escaping
+function debug(..._) {
+	console.trace();
+	return log(..._);
+}
+function log(..._) {
+	console.log([..._]);
+	return _[0];
+}
 function HTMLEscape(v) {
 	return $('<div>').text(v).html();
 }
-
 function HTMLUnescape(v) {
 	var toEscape = /&(?:#\d+|\w+)+?;/g;
 	var vs = v.split(toEscape);
 	var escaped = [];
 	var out = [];
-
 	var escapeHTML = (_) => $('<div>').html(_).text();
 	var c;
 	while (c = toEscape.exec(v))
 		escaped.push(escapeHTML(c[0]));
-
 	for (i of range(vs.length - 1))
 		out.push(vs[i] + (i in escaped && escaped[i] || ""));
-	
 	return out.join('');
 }
-
-// String's methods
 String.prototype.hash = function () {
 	var str = this;
 	var hash = 0;
@@ -73,7 +61,6 @@ String.prototype.hash = function () {
 	}
 	return hash;
 };
-
 String.prototype.f = function (..._) {
 	var s = this;
 	for (var i in _) {
@@ -81,7 +68,6 @@ String.prototype.f = function (..._) {
 	}
 	return s;
 };
-
 String.prototype.format = function (_) {
 	var s = this;
 	for (var i in _) {
@@ -89,15 +75,12 @@ String.prototype.format = function (_) {
 	}
 	return s;
 };
-
-// Array's methods
-Array.prototype.iterate = function* (a, b, c) {
+Array.prototype.iterate = function  * (a, b, c) {
 	var l = this.length;
 	for (i of range(a, b, c, l)) {
 		yield this[i];
 	}
 };
-
 Array.prototype.get = function (a, b, c) {
 	return [...this.iterate(a, b, c)];
 };

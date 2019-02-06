@@ -1,0 +1,51 @@
+$as: ("red" rgba(#f44336, 1)) ("pink" rgba(#e91e63, 1)) ("purple" rgba(#9c27b0, 1)) ("indigo" rgba(#3f51b5, 1)) ("blue" rgba(#2196f3, 1)) ("light-blue" rgba(#03a9f4, 1)) ("cyan" rgba(#00bcd4, 1)) ("teal" rgba(#009688, 1)) ("green" rgba(#4caf50, 1)) ("light-green" rgba(#8bc34a, 1)) ("lime" rgba(#cddc39, 1)) ("yellow" rgba(#ffeb3b, 1)) ("amber" rgba(#ffc107, 1)) ("orange" rgba(#ff9800, 1)) ("deep-orange" rgba(#ff5722, 1)) ("brown" rgba(#795548, 1)) ("grey" rgba(#9e9e9e, 1)) ("blue-grey" rgba(#607d8b, 1)) ("black" rgba(black, 1)) ("white" rgba(white, 1));
+
+@each $a in $as {
+  .bg-#{nth($a, 1)} {
+    background-color: nth($a, 2);
+
+    @for $i from 5 through 1 {
+      &-darken-#{$i} {
+        background-color: darken(nth($a, 2), $i * 5);
+      }
+    }
+
+    @for $i from 1 through 5 {
+      &-lighten-#{$i} {
+        background-color: lighten(nth($a, 2), $i * 5);
+      }
+    }
+  }
+
+  .#{nth($a, 1)} {
+    color: nth($a, 2);
+
+    @for $i from 5 through 1 {
+      &-darken-#{$i} {
+        color: darken(nth($a, 2), $i * 5);
+      }
+    }
+
+    @for $i from 1 through 5 {
+      &-lighten-#{$i} {
+        color: lighten(nth($a, 2), $i * 5);
+      }
+    }
+  }
+
+  .border-#{nth($a, 1)} {
+    border-color: nth($a, 2);
+
+    @for $i from 5 through 1 {
+      &-darken-#{$i} {
+        border-color: darken(nth($a, 2), $i * 5);
+      }
+    }
+
+    @for $i from 1 through 5 {
+      &-lighten-#{$i} {
+        border-color: lighten(nth($a, 2), $i * 5);
+      }
+    }
+  }
+}
