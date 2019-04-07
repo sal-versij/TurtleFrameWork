@@ -7,3 +7,7 @@ function log(..._) {
 	console.log([..._]);
 	return _[0];
 }
+
+function info(_) {
+	console.log(_);
+}
