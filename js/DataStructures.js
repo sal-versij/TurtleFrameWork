@@ -38,6 +38,7 @@ class PriorityQueue {
 
 	push(...values) {
 		values.forEach(value => {
+			this._heap.push(v);
 			this._sift(value);
 		});
 		return this.size();
@@ -60,11 +61,10 @@ class PriorityQueue {
 		[this._heap[i], this._heap[j]] = [this._heap[j], this._heap[i]];
 	}
 
-	_sift(v) {
-		let i = this.size();
-		this._heap.push(v);
-		while (this._greater(i - 1, i)) {
-			this._swap(i - 1, i);
+	_sift() {
+		let i = this.size() - 2;
+		while (this._greater(i, i - 1)) {
+			this._swap(i, i - 1);
 			i--;
 		}
 	}
