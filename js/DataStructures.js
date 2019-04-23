@@ -1,4 +1,3 @@
-
 Array.prototype.iterate = function  * (a, b, c) {
 	var l = this.length;
 	for (i of range(a, b, c, l)) {
