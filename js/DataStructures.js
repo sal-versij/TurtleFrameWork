@@ -21,7 +21,6 @@ class PriorityQueue {
 	constructor(comparator = (a, b) => a > b) {
 		this._heap = [];
 		this._comparator = comparator;
-
 	}
 
 	size() {
@@ -63,7 +62,7 @@ class PriorityQueue {
 
 	_sift() {
 		let i = this.size() - 2;
-		while (this._greater(i, i - 1)) {
+		while (i > 0 && this._greater(i, i - 1)) {
 			this._swap(i, i - 1);
 			i--;
 		}
