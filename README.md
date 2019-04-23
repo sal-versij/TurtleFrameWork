@@ -22,8 +22,14 @@ ___
 - `String.`***format(_)*** \
   formatta la stringa cambiando ogni valore `'{key}'` nella stringa nel valore di chiave `key` in `_`
 
-### Funzioni per `Array`
+### DataStructures
+#### Additional functions for Array
 - `Array.`***iterate(a, b, c)*** \
   restituisce un iteratore degli elementi nell'array compresi nel range definito dalla funzione `range(a,b,c,this.length)`
 - `Array.`***get(a, b, c)*** \
   restituisce l'array degli elementi iterati tramite `Array.`***iterate(a, b, c)***
+- `peekPop`***peekPop()*** \
+  restituisce l'ultimo elemento dell'array senza rimuoverlo
+- `peekShift`***peekShift()*** \
+  restituisce il primo elemento dell'array senza rimuoverlo
+#### PriorityQueue
