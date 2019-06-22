@@ -13,7 +13,7 @@ ___
   Fa l'escape della stringa passata in entità **HTML**
 - ***HTMLUnescape(v)*** \
   Fa l'unescape delle entità **HTML** nella stringa passata
-
+___
 ### Funzioni per `String`
 - `String.`***hash()*** \
   restituisce l'hash della stringa
@@ -21,7 +21,7 @@ ___
   formatta la stringa cambiando ogni valore `'{i}'` nella stringa nel valore in posizione `i` in `_`
 - `String.`***format(_)*** \
   formatta la stringa cambiando ogni valore `'{key}'` nella stringa nel valore di chiave `key` in `_`
-
+___
 ### DataStructures
 #### Additional functions for Array
 - `Array.`***iterate(a, b, c)*** \
@@ -32,4 +32,5 @@ ___
   restituisce l'ultimo elemento dell'array senza rimuoverlo
 - `peekShift`***peekShift()*** \
   restituisce il primo elemento dell'array senza rimuoverlo
+___
 #### PriorityQueue
